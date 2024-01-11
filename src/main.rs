@@ -1,11 +1,15 @@
+
 use std::io::{stdout, stdin, Write};
 
 #[path = "commands/command.rs"]
 mod command;
+mod database;
+use crate::database::database::Database;
 
 fn main() {
     println!("Hello Welcome to rrdb");
     let mut command = String::new();
+    let mut db = Database::new();
     loop{
         print!("sdb> ");
         stdout().flush().unwrap();
