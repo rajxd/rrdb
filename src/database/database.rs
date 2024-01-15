@@ -11,3 +11,7 @@ impl Database{
         return Database{tables:vec![]};
     }
 }
+
+pub fn process_command(cmd : String, db : &mut Database) {
+    
+}
