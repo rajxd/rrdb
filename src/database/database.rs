@@ -12,6 +12,3 @@ impl Database{
     }
 }
 
-pub fn process_command(cmd : String, db : &mut Database) {
-    
-}

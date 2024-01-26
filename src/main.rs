@@ -4,7 +4,7 @@ use std::io::{stdout, stdin, Write};
 #[path = "commands/command.rs"]
 mod command;
 mod database;
-use crate::database::database::Database;
+use crate::{database::database::Database, command::CommandType};
 
 fn main() {
     println!("Hello Welcome to rrdb");
@@ -16,10 +16,17 @@ fn main() {
 
         stdin().read_line(&mut command).expect("Error in reading from stdin");
         
-        print!("CommandType: {:?}", command::get_command_type(&command));
-        command = "".to_string();
+        let command_type = command::get_command_type(&command);
+        match command_type{
+            CommandType::MetaCommand(meta_command) => {
+                command::process_meta_command(meta_command, &mut db);
+            }
+            CommandType::DbCommand(_c) => {
+                command::process_db_command(command.trim().to_string(), &mut db);
+            }
+        }
 
-        println!("{}", command);
+        // println!("{}", command);
         
         command = "".to_string();
     }

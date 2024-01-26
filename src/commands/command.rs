@@ -1,3 +1,5 @@
+use crate::database::database::Database;
+
 #[derive(Debug)]
 pub enum CommandType{
     MetaCommand(MetaCommand),
@@ -46,4 +48,12 @@ pub fn get_command_type(cmd: &String) -> CommandType{
         true => CommandType::MetaCommand(MetaCommand::new(cmd.to_owned())),
         false => CommandType::DbCommand(DbCommand::new(cmd.to_owned()))
     }
+}
+
+pub fn process_meta_command(meta_command : MetaCommand, db: &mut Database) {
+    
+}
+
+pub fn process_db_command(cmd : String, db: &mut Database) {
+    
 }
