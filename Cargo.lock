@@ -3,5 +3,23 @@
 version = 3
 
 [[package]]
+name = "log"
+version = "0.4.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
+
+[[package]]
 name = "rrdb"
 version = "0.1.0"
+dependencies = [
+ "sqlparser",
+]
+
+[[package]]
+name = "sqlparser"
+version = "0.43.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f95c4bae5aba7cd30bd506f7140026ade63cff5afd778af8854026f9606bf5d4"
+dependencies = [
+ "log",
+]

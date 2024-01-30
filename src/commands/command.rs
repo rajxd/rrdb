@@ -1,4 +1,7 @@
 use crate::database::database::Database;
+use sqlparser::dialect::MySqlDialect;
+use sqlparser::parser::Parser;
+use sqlparser::ast::Statement;
 
 #[derive(Debug)]
 pub enum CommandType{
@@ -51,9 +54,34 @@ pub fn get_command_type(cmd: &String) -> CommandType{
 }
 
 pub fn process_meta_command(meta_command : MetaCommand, db: &mut Database) {
-    
+    match meta_command {
+        MetaCommand::Exit => std::process::exit(0),
+        MetaCommand::ListTables => println!("TODO"),
+        MetaCommand::Unknown(cmd) => println!("Unknown Command, {}", cmd)
+        
+    }
 }
 
-pub fn process_db_command(cmd : String, db: &mut Database) {
+pub fn process_db_command(query : String, db: &mut Database) {
+    let dialect = MySqlDialect{};
+    let parse_sql = Parser::parse_sql(&dialect, &query);
+    match parse_sql {
+        Err( .. ) => {
+            println!("Invalid command");
+            return;
+        }
+        Ok( .. )=>print!("")
+    }
+    let statements = &parse_sql.unwrap();
+    println!("statement: {:?}", statements);
+    for s in statements {
+        match s {
+            Statement::CreateTable{ .. } =>{
+                println!("Inside Create")
+            }
+            _ => println!("Invalid Command")
+        }
+    }
+
     
 }
