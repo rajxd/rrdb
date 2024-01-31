@@ -1,4 +1,6 @@
 use crate::database::database::Database;
+use crate::database::table::Table;
+use crate::parser::create::CreateQuery;
 use sqlparser::dialect::MySqlDialect;
 use sqlparser::parser::Parser;
 use sqlparser::ast::Statement;
@@ -76,9 +78,17 @@ pub fn process_db_command(query : String, db: &mut Database) {
     println!("statement: {:?}", statements);
     for s in statements {
         match s {
-            Statement::CreateTable{ .. } =>{
-                println!("Inside Create")
-            }
+            Statement::CreateTable{ .. } => {
+                let cq: Result<CreateQuery, String> = CreateQuery::new(s);
+                match cq {
+                    Err( .. ) => {
+                        println!("Invalid Create Command");
+                        return;
+                    }
+                    Ok( .. )=>print!("")
+                }
+                db.tables.push(Table::new(cq.unwrap()));
+            },
             _ => println!("Invalid Command")
         }
     }

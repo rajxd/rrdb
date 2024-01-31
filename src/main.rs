@@ -4,6 +4,7 @@ use std::io::{stdout, stdin, Write};
 #[path = "commands/command.rs"]
 mod command;
 mod database;
+mod parser;
 use crate::{database::database::Database, command::CommandType};
 
 fn main() {
