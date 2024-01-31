@@ -1,7 +1,11 @@
+use core::fmt;
 use std::{collections::HashMap, hash::Hash};
-use crate::parser::{
+use crate::{database::table, parser::{
     create::CreateQuery
-};
+}};
+use prettytable::{Cell, row, Table as PTable};
+use serde::{Deserialize, Serialize};
+
 #[derive(Debug)]
 pub struct Table{
     pub name: String,
@@ -30,13 +34,25 @@ pub enum ColumnData {
 }
 
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum DataType{
     Int,
     Str,
     Float,
-    Boolean,
+    Bool,
     Invalid
+}
+
+impl fmt::Display for DataType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            DataType::Int => f.write_str("Int"),
+            DataType::Str => f.write_str("Str"),
+            DataType::Float => f.write_str("Float"),
+            DataType::Bool => f.write_str("Boolean"),
+            DataType::Invalid => f.write_str("Invalid"),
+        }
+    }
 }
 
 impl DataType{
@@ -45,7 +61,7 @@ impl DataType{
             "int" => DataType::Int,
             "string" => DataType::Str,
             "float" => DataType::Float,
-            "bool" => DataType::Boolean,
+            "bool" => DataType::Bool,
             _ => DataType::Invalid
         }
     }
@@ -61,7 +77,7 @@ impl Table{
             table_data.insert(column.name.to_string(),
              {
                 match DataType::new(column.data_type.to_string()) {
-                    DataType::Boolean => ColumnData::Bool(vec![]),
+                    DataType::Bool => ColumnData::Bool(vec![]),
                     DataType::Invalid => ColumnData::None,
                     DataType::Int => ColumnData::Int(vec![]),
                     DataType::Str => ColumnData::Str(vec![]),
@@ -71,6 +87,22 @@ impl Table{
         }
 
         Table { name: cq.table_name, columns: table_columns, rows: table_data }
+    }
+
+    pub fn print_tables(&self){
+        println!("Table Name - {}", &self.name);
+
+        let mut ptable = PTable::new();
+        ptable.add_row(row!["Column Name", "Data Type"]);
+
+        for col in &self.columns{
+            // table.add_row(row![column.name, column.datatype]);
+            ptable.add_row(row![col.name, col.datatype]);
+
+            // ptable.add_row(row![c.name, c.datatype]);
+        }
+
+        ptable.printstd();
     }
 }
 

@@ -27,11 +27,10 @@ pub enum DbCommand{
 
 impl MetaCommand{
     pub fn new(cmd: String) -> MetaCommand{
-        match cmd.as_ref(){
+        match cmd.as_str() {
             ".exit" => MetaCommand::Exit,
             ".tables" => MetaCommand::ListTables,
-            _ => MetaCommand::Unknown(cmd),
-
+            _ => MetaCommand::Unknown(cmd)
         }
     }
 }
@@ -58,7 +57,11 @@ pub fn get_command_type(cmd: &String) -> CommandType{
 pub fn process_meta_command(meta_command : MetaCommand, db: &mut Database) {
     match meta_command {
         MetaCommand::Exit => std::process::exit(0),
-        MetaCommand::ListTables => println!("TODO"),
+        MetaCommand::ListTables => {
+            for table in  &db.tables{
+                table.print_tables();
+            }
+        },
         MetaCommand::Unknown(cmd) => println!("Unknown Command, {}", cmd)
         
     }

@@ -17,7 +17,7 @@ fn main() {
 
         stdin().read_line(&mut command).expect("Error in reading from stdin");
         
-        let command_type = command::get_command_type(&command);
+        let command_type = command::get_command_type(&command.trim().to_owned());
         match command_type{
             CommandType::MetaCommand(meta_command) => {
                 command::process_meta_command(meta_command, &mut db);
