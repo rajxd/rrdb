@@ -1,6 +1,7 @@
 use crate::database::database::Database;
 use crate::database::table::Table;
 use crate::parser::create::CreateQuery;
+use crate::parser::insert::InsertQuery;
 use sqlparser::dialect::MySqlDialect;
 use sqlparser::parser::Parser;
 use sqlparser::ast::Statement;
@@ -92,6 +93,10 @@ pub fn process_db_command(query : String, db: &mut Database) {
                 }
                 db.tables.push(Table::new(cq.unwrap()));
             },
+            Statement::Insert { .. } => {
+                let cq = InsertQuery::new(s);
+                
+            }
             _ => println!("Invalid Command")
         }
     }
